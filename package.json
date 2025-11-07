@@ -4,20 +4,27 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "dev": "tsx watch --env-file=.env ./src/server/index.ts",
     "seed": "node scripts/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-validator": "^7.3.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.3"
+    "mongoose": "^8.19.3",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.10.0",
+    "tsx": "^4.20.6"
   }
 }

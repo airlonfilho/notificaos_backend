@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const serviceOrderSchema = new mongoose.Schema({
-  organizationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Organization', required: true },
+export const serviceOrderSchema = model('ServiceOrder', new Schema({
+  organizationId: { type: Schema.Types.ObjectId, ref: 'Organization', required: true },
   humanId: { type: String, required: true },
   status: { type: String, required: true },
   client: {
@@ -16,8 +16,6 @@ const serviceOrderSchema = new mongoose.Schema({
   observedState: [{ type: String }],
   accessories: [{ type: String }],
   notes: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+},{ timestamps: true }
+));
 
-module.exports = mongoose.model('ServiceOrder', serviceOrderSchema);
