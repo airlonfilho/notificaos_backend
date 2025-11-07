@@ -3,6 +3,13 @@ export interface IRequest {
   headers: Record<string, string>;
   params?: Record<string, string>;
   query?: Record<string, any>;
+  metadata?: {
+    organization?: {
+      id: number;
+      loginPhone: string;
+      plan: string;
+    }
+  } | undefined
 }
 
 export interface IResponse {

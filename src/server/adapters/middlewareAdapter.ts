@@ -8,11 +8,16 @@ export function middlewareAdapter(middleware: IMiddleware) {
       body: request.body,
       params: request.params,
       query: request.query,
+      metadata: request.metadata,
     });
 
     if ('statusCode' in responseMiddleware) {
       return response.status(responseMiddleware.statusCode).json(responseMiddleware.body);
     }
+
+     const oi = {
+      ...responseMiddleware.data.organization
+     };
 
     request.metadata = {
       ...request.metadata,

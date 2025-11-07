@@ -1,6 +1,12 @@
 declare namespace Express {
   export interface Request {
-    metadata?: Record<string, any>;
-  }
+    metadata?: {
+      organization?: {
+        id: number;
+        loginPhone: string;
+        plan: string;
+      };
+    };
+  } 
 }
 

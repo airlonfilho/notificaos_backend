@@ -33,7 +33,7 @@ export class SignInUseCase {
     }
 
     const token = this.tokenProvider.sign(
-      { id: organization._id, loginPhone: organization.loginPhone },
+      { id: organization._id, loginPhone: organization.loginPhone, plan: organization.billing.plan },
       this.jwtSecret,
       { expiresIn: '7d' }
     );

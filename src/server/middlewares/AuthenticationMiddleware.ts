@@ -33,9 +33,11 @@ export class AuthenticationMiddleware implements IMiddleware {
           organization: {
             id: payload.id,
             loginPhone: payload.loginPhone,
+            plan: payload.plan
           },
         },
       };
+
 
     } catch {
         
