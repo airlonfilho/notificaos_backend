@@ -1,12 +1,14 @@
 import express from 'express';
 import { router } from './routes.js';
 import { connectDatabase } from '../infra/database/connects.js';
+import { cors } from './middlewares/CORS.js';
 
 const app = express();
 
 async function startServer(){
     try {
         await connectDatabase();
+        app.use(cors);
         app.use(express.json());
         app.use(router);
 
