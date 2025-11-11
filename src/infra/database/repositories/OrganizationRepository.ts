@@ -1,7 +1,8 @@
 import type { IOrganizationRepository } from '../../../application/interfaces/repositories/OrganizationRepository.js';
 import type { CreateOrganizationDTO } from '../../../application/interfaces/dtos/CreateOrganizationDTO.js';
 import type { IOrganization } from '../../../application/interfaces/entities/Organization.js';
-import {  OrganizationSchema } from '../models/Organization.js';
+import { OrganizationSchema } from '../models/Organization.js';
+import { DuplicateFieldError } from '../../../application/errors/DuplicateFieldError.js';
 
 export class OrganizationRepository implements IOrganizationRepository {
     
@@ -21,8 +22,27 @@ export class OrganizationRepository implements IOrganizationRepository {
   }
 
   async update(id: string, data: Partial<IOrganization>): Promise<IOrganization | null> {
-    const organization = await OrganizationSchema.findByIdAndUpdate(id, data, { new: true });
-    return organization?.toObject<IOrganization>() ?? null;
+    try {
+      const organization = await OrganizationSchema.findByIdAndUpdate(
+        id, 
+        data, 
+        { 
+          new: true, 
+          runValidators: true 
+        }
+      );
+      return organization?.toObject<IOrganization>() ?? null;
+    } catch (error: any) {
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyPattern || {})[0] || 'desconhecido';
+        const fieldName = field.includes('email') ? 'email' 
+                        : field.includes('cnpj') ? 'CNPJ' 
+                        : field.includes('loginPhone') ? 'telefone' 
+                        : field;
+        throw new DuplicateFieldError(fieldName);
+      }
+      throw error;
+    }
   }
 
   async delete(id: string): Promise<boolean> {

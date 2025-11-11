@@ -24,10 +24,10 @@ export const signUpSchema = z.object({
       onReady: z.string().optional(),
     })
     .optional(),
-});
+}).strict();
 
 export const signInSchema = z.object({
   loginPhone: z.string().min(1, 'Telefone é obrigatório'),
   password: z.string().min(1, 'Senha é obrigatória'),
-});
+}).strict();
 

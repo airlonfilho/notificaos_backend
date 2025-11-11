@@ -2,6 +2,7 @@ import express from 'express';
 import { router } from './routes.js';
 import { connectDatabase } from '../infra/database/connects.js';
 import { cors } from './middlewares/CORS.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 
@@ -11,6 +12,7 @@ async function startServer(){
         app.use(cors);
         app.use(express.json());
         app.use(router);
+        app.use(errorHandler);
 
         const PORT = process.env.PORT || 3000;
 
