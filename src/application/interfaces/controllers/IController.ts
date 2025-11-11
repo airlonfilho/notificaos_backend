@@ -5,7 +5,7 @@ export interface IRequest {
   query?: Record<string, any>;
   metadata?: {
     organization?: {
-      id: number;
+      id: string;
       loginPhone: string;
       plan: string;
     }

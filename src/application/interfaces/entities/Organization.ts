@@ -1,7 +1,7 @@
 export interface IOrganizationContact {
-  cnpj?: string;
-  email?: string;
-  address?: string;
+  cnpj?: string | undefined;
+  email?: string | undefined;
+  address?: string | undefined;
 }
 
 export interface IOrganizationBilling {
@@ -11,8 +11,8 @@ export interface IOrganizationBilling {
 }
 
 export interface IOrganizationNotificationTemplates {
-  onOpen?: string;
-  onReady?: string;
+  onOpen?: string | undefined;
+  onReady?: string | undefined;
 }
 
 export interface IOrganization {
@@ -20,10 +20,10 @@ export interface IOrganization {
   name: string;
   loginPhone: string;
   hashedPassword: string;
-  logoUrl?: string;
-  contact?: IOrganizationContact;
+  logoUrl?: string | undefined;
+  contact?: IOrganizationContact | undefined;
   billing: IOrganizationBilling;
-  notificationTemplates?: IOrganizationNotificationTemplates;
+  notificationTemplates?: IOrganizationNotificationTemplates | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
