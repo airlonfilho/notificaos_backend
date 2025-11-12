@@ -18,12 +18,12 @@ export class GetProfileController implements IController {
     }
 
     try {
-      const profile = await this.getProfileUseCase.execute(organizationId);
+      const organization = await this.getProfileUseCase.execute(organizationId);
 
       return {
         statusCode: 200,
         body: {
-          profile,
+          organization,
         },
       };
     } catch (error) {

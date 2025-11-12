@@ -10,12 +10,12 @@ export class SignInController implements IController {
   async handle({ body }: IRequest): Promise<IResponse> {
     try {
       const data = signInSchema.parse(body);
-      const acessToken = await this.signInUseCase.execute(data);
+      const accessToken = await this.signInUseCase.execute(data);
 
       return {
         statusCode: 200,
         body: {
-            acessToken
+            accessToken
         },
       };
 

@@ -5,6 +5,7 @@ import { InvalidCredentialsError } from '../../application/errors/InvalidCredent
 import { InvalidTokenError } from '../../application/errors/InvalidTokenError.js';
 import { OrganizationAlreadyExistsError } from '../../application/errors/OrganizationAlreadyExistsError.js';
 import { OrganizationNotFoundError } from '../../application/errors/OrganizationNotFoundError.js';
+import { ServiceOrderNotFoundError } from '../../application/errors/ServiceOrderNotFoundError.js';
 
 export function errorHandler(
   error: any,
@@ -54,6 +55,12 @@ export function errorHandler(
 
   if (error instanceof DuplicateFieldError) {
     return response.status(409).json({
+      error: error.message,
+    });
+  }
+
+  if (error instanceof ServiceOrderNotFoundError) {
+    return response.status(404).json({
       error: error.message,
     });
   }

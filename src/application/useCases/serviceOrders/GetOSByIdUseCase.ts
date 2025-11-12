@@ -1,0 +1,22 @@
+import type { IServiceOrderRepository } from '../../interfaces/repositories/ServiceOrderRepository.js';
+import type { IServiceOrder } from '../../interfaces/entities/ServiceOrder.js';
+import { ServiceOrderNotFoundError } from '../../errors/ServiceOrderNotFoundError.js';
+
+export class GetOSByIdUseCase {
+  constructor(private readonly serviceOrderRepository: IServiceOrderRepository) {}
+
+  async execute(id: string, organizationId: string): Promise<IServiceOrder> {
+    const serviceOrder = await this.serviceOrderRepository.findById(id);
+
+    if (!serviceOrder) {
+      throw new ServiceOrderNotFoundError();
+    }
+
+    if (String(serviceOrder.organizationId)!== organizationId) {
+      throw new ServiceOrderNotFoundError();
+    }
+
+    return serviceOrder;
+  }
+}
+

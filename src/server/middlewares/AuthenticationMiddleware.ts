@@ -38,7 +38,6 @@ export class AuthenticationMiddleware implements IMiddleware {
         },
       };
 
-
     } catch {
         
       return {

@@ -4,6 +4,12 @@ import type { IOrganization } from '../../../application/interfaces/entities/Org
 import { OrganizationSchema } from '../models/Organization.js';
 import { DuplicateFieldError } from '../../../application/errors/DuplicateFieldError.js';
 
+const DUPLICATE_FIELD_NAMES: Record<string, string> = {
+  'contact.email': 'email',
+  'contact.cnpj': 'CNPJ',
+  'loginPhone': 'telefone',
+};
+
 export class OrganizationRepository implements IOrganizationRepository {
     
   async create(data: CreateOrganizationDTO): Promise<IOrganization> {
@@ -24,30 +30,22 @@ export class OrganizationRepository implements IOrganizationRepository {
   async update(id: string, data: Partial<IOrganization>): Promise<IOrganization | null> {
     try {
       const organization = await OrganizationSchema.findByIdAndUpdate(
-        id, 
-        data, 
-        { 
-          new: true, 
-          runValidators: true 
-        }
+        id,
+        data,
+        { new: true, runValidators: true }
       );
       return organization?.toObject<IOrganization>() ?? null;
     } catch (error: any) {
       if (error.code === 11000) {
         const field = Object.keys(error.keyPattern || {})[0] || 'desconhecido';
-        const fieldName = field.includes('email') ? 'email' 
-                        : field.includes('cnpj') ? 'CNPJ' 
-                        : field.includes('loginPhone') ? 'telefone' 
-                        : field;
-        throw new DuplicateFieldError(fieldName);
+        throw new DuplicateFieldError(DUPLICATE_FIELD_NAMES[field] || field);
       }
       throw error;
     }
   }
 
   async delete(id: string): Promise<boolean> {
-    const isDeleted = await OrganizationSchema.findByIdAndDelete(id).exec();
-
+    const isDeleted = await OrganizationSchema.findByIdAndDelete(id);
     return !!isDeleted;
   }
 }
