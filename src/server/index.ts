@@ -1,7 +1,9 @@
 import express from 'express';
+import helmet from 'helmet';
 import { router } from './routes.js';
-import { connectDatabase } from '../infra/database/connects.js';
+import { connectDatabase } from '../shared/infra/database/connects.js';
 import { cors } from './middlewares/CORS.js';
+import { generalLimiter } from './middlewares/rateLimiter.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { apiReference } from '@scalar/express-api-reference';
 import { openApiDocument } from './docs/openapi.js';
@@ -17,6 +19,10 @@ const app = express();
 async function startServer(){
     try {
         await connectDatabase();
+        
+        app.use(helmet());
+        app.use(generalLimiter);
+        
         app.use(cors);
         app.use(express.json());
         app.use(router);

@@ -1,17 +1,18 @@
 import { Router } from 'express';
-import { routeAdapter } from './adapters/routeAdapter.js';
-import { makeSignUpController } from '../application/factories/authFactories/makeSignUpController.js';
-import { makeSignInController } from '../application/factories/authFactories/makeSignInController.js';
-import { middlewareAdapter } from './adapters/middlewareAdapter.js';
-import { makeAuthenticationMiddleware } from '../application/factories/middlewaresFactories/makeAuthenticationMiddleware.js';
-import { makeAuthorizationMiddleware } from '../application/factories/middlewaresFactories/makeAuthorizationMiddleware.js';
-import { makeGetProfileController } from '../application/factories/organizationsFactories/makeGetProfileController.js';
-import { makeUpdateProfileController } from '../application/factories/organizationsFactories/makeUpdateProfileController.js';
-import { makeCreateOSController } from '../application/factories/OSFactories/makeCreateOSController.js';
-import { makeListOSController } from '../application/factories/OSFactories/makeListOSController.js';
-import { makeGetOSByIdController } from '../application/factories/OSFactories/makeGetOSByIdController.js';
-import { makeUpdateOSController } from '../application/factories/OSFactories/makeUpdateOSController.js';
-import { makeDeleteOSController } from '../application/factories/OSFactories/makeDeleteOSController.js';
+import { routeAdapter } from '../shared/adapters/routeAdapter.js';
+import { authLimiter } from './middlewares/rateLimiter.js';
+import { makeSignUpController } from '../modules/auth/factories/makeSignUpController.js';
+import { makeSignInController } from '../modules/auth/factories/makeSignInController.js';
+import { middlewareAdapter } from '../shared/adapters/middlewareAdapter.js';
+import { makeAuthenticationMiddleware } from '../modules/auth/factories/makeAuthenticationMiddleware.js';
+import { makeAuthorizationMiddleware } from '../modules/auth/factories/makeAuthorizationMiddleware.js';
+import { makeGetProfileController } from '../modules/organizations/factories/makeGetProfileController.js';
+import { makeUpdateProfileController } from '../modules/organizations/factories/makeUpdateProfileController.js';
+import { makeCreateOSController } from '../modules/serviceOrders/factories/makeCreateOSController.js';
+import { makeListOSController } from '../modules/serviceOrders/factories/makeListOSController.js';
+import { makeGetOSByIdController } from '../modules/serviceOrders/factories/makeGetOSByIdController.js';
+import { makeUpdateOSController } from '../modules/serviceOrders/factories/makeUpdateOSController.js';
+import { makeDeleteOSController } from '../modules/serviceOrders/factories/makeDeleteOSController.js';
 
 export const router = Router();
 
@@ -19,8 +20,8 @@ router.get('/', (request, response) => {
   response.json({ success: true });
 });
 
-router.post('/auth/sign-up', routeAdapter(makeSignUpController()));
-router.post('/auth/sign-in', routeAdapter(makeSignInController()));
+router.post('/auth/sign-up', authLimiter, routeAdapter(makeSignUpController()));
+router.post('/auth/sign-in', authLimiter, routeAdapter(makeSignInController()));
 
 router.get('/org',
   middlewareAdapter(makeAuthenticationMiddleware()),

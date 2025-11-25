@@ -1,8 +1,8 @@
 import type { JwtPayload } from 'jsonwebtoken';
-import { InvalidTokenError } from '../../application/errors/InvalidTokenError.js';
-import type { IMiddleware, IResponse, IData } from '../../application/interfaces/controllers/IMiddleware.js';
-import type { IRequest } from '../../application/interfaces/controllers/IController.js';
-import type { ITokenJwtProvider } from '../../application/interfaces/providers/ITokenJWTProvider.js';
+import { InvalidTokenError } from '../../shared/errors/InvalidTokenError.js';
+import type { IMiddleware, IResponse, IData } from '../../shared/protocols/IMiddleware.js';
+import type { IRequest } from '../../shared/protocols/IController.js';
+import type { ITokenJwtProvider } from '../../shared/container/providers/ITokenJWTProvider.js';
 
 export class AuthenticationMiddleware implements IMiddleware {
   constructor(private readonly tokenJwtProvider: ITokenJwtProvider) {}

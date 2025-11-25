@@ -406,7 +406,6 @@ registry.registerPath({
   },
 });
 
-// ===== GERAR DOCUMENTO OPENAPI ===== //
 
 export const openApiDocument = new OpenApiGeneratorV3(registry.definitions).generateDocument({
   openapi: '3.0.0',

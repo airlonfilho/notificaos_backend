@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
-import { DuplicateFieldError } from '../../application/errors/DuplicateFieldError.js';
-import { InvalidCredentialsError } from '../../application/errors/InvalidCredentialsError.js';
-import { InvalidTokenError } from '../../application/errors/InvalidTokenError.js';
-import { OrganizationAlreadyExistsError } from '../../application/errors/OrganizationAlreadyExistsError.js';
-import { OrganizationNotFoundError } from '../../application/errors/OrganizationNotFoundError.js';
-import { ServiceOrderNotFoundError } from '../../application/errors/ServiceOrderNotFoundError.js';
+import { DuplicateFieldError } from '../../shared/errors/DuplicateFieldError.js';
+import { InvalidCredentialsError } from '../../shared/errors/InvalidCredentialsError.js';
+import { InvalidTokenError } from '../../shared/errors/InvalidTokenError.js';
+import { OrganizationAlreadyExistsError } from '../../shared/errors/OrganizationAlreadyExistsError.js';
+import { OrganizationNotFoundError } from '../../shared/errors/OrganizationNotFoundError.js';
+import { ServiceOrderNotFoundError } from '../../shared/errors/ServiceOrderNotFoundError.js';
 
 export function errorHandler(
   error: any,
@@ -13,14 +13,12 @@ export function errorHandler(
   response: Response,
   next: NextFunction
 ) {
-  // Log do erro (em produção, usar logger adequado)
   console.error('Error:', {
     name: error.name,
     message: error.message,
     stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
   });
 
-  // Erros de validação Zod
   if (error instanceof ZodError) {
     return response.status(400).json({
       error: 'Validation Error',
@@ -28,7 +26,6 @@ export function errorHandler(
     });
   }
 
-  // Erros customizados de domínio
   if (error instanceof OrganizationAlreadyExistsError) {
     return response.status(409).json({
       error: error.message,
@@ -65,7 +62,6 @@ export function errorHandler(
     });
   }
 
-  // Erros do Mongoose - Validação
   if (error.name === 'ValidationError') {
     const errors = Object.values(error.errors).map((e: any) => e.message);
     return response.status(400).json({
@@ -74,7 +70,6 @@ export function errorHandler(
     });
   }
 
-  // Erros do Mongoose - Duplicação (caso escape do repository)
   if (error.code === 11000) {
     const field = Object.keys(error.keyPattern || {})[0] || 'campo';
     return response.status(409).json({
@@ -82,14 +77,12 @@ export function errorHandler(
     });
   }
 
-  // Erros do Mongoose - Cast Error (ID inválido)
   if (error.name === 'CastError') {
     return response.status(400).json({
       error: 'ID inválido',
     });
   }
 
-  // Erros JWT
   if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({
       error: 'Token inválido',
@@ -102,7 +95,6 @@ export function errorHandler(
     });
   }
 
-  // Erro padrão (500)
   return response.status(error.status || 500).json({
     error: error.message || 'Erro interno do servidor',
   });

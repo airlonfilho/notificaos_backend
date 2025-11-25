@@ -1,6 +1,6 @@
 import { response } from "express";
-import { IRequest } from "../../application/interfaces/controllers/IController.js";
-import { IMiddleware } from "../../application/interfaces/controllers/IMiddleware.js";
+import { IRequest } from "../../shared/protocols/IController.js";
+import { IMiddleware } from "../../shared/protocols/IMiddleware.js";
 
 export class AuthorizationMiddleware implements IMiddleware{
 
